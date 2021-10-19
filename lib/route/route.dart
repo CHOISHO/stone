@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:diary/pages/Home.dart';
-import 'package:diary/pages/Login.dart';
+import 'package:diary/page/Home.dart';
+import 'package:diary/page/Login.dart';
 
 // Route Names
 const String loginPage = 'login';
