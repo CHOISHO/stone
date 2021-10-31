@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 
-import 'package:diary/controller/lunch.controller.dart';
+import 'package:diary/controller/lunch_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,15 +16,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final LunchController lunchController = Get.put(LunchController());
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
-      drawer: Drawer(),
+      drawer: const Drawer(),
       body: _HomeBody(),
     );
   }
@@ -31,7 +32,7 @@ class _HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: const [
         Expanded(
           child: MyList(),
         ),
@@ -48,37 +49,46 @@ class MyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LunchController lunchController = Get.find();
-
+    final LunchController lunch = Get.find();
+    RxList lunchList = lunch.lunch;
+    StreamController<int> controller = StreamController<int>();
     return Center(
-      child: Obx(() => Text(lunchController.lunch.toString())),
+      child: Obx(
+        () => lunchList.length > 1
+            ? FortuneWheel(
+                physics: CircularPanPhysics(
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.decelerate,
+                ),
+                onFling: () {
+                  controller.add(1);
+                },
+                selected: controller.stream,
+                items: [
+                  for (var lunch in lunchList) FortuneItem(child: Text(lunch)),
+                ],
+              )
+            : Container(),
+      ),
     );
   }
 }
 
-class ItemMaker extends StatefulWidget {
-  const ItemMaker({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<ItemMaker> createState() => _ItemMakerState();
-}
-
-class _ItemMakerState extends State<ItemMaker> {
-  String textInputValue = '';
+class ItemMaker extends StatelessWidget {
+  const ItemMaker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final LunchController lunchController = Get.find();
+    final lunchInput = TextEditingController();
+    final LunchController lunch = Get.find();
 
     return Container(
       width: double.infinity,
       height: 250,
-      padding: EdgeInsets.all(30),
+      padding: const EdgeInsets.all(30),
       decoration: BoxDecoration(
         color: Colors.amber[200],
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
         ),
@@ -91,15 +101,16 @@ class _ItemMakerState extends State<ItemMaker> {
             style: Theme.of(context).textTheme.headline1,
           ),
           Expanded(
-            child: TextField(
-              controller: lunchController.lunchController,
-              //   onChanged: (value) {
-              //     lunchController.setLunchInput(value);
-              //   },
+            child: TextFormField(
+              controller: lunchInput,
             ),
           ),
           AddButton(
-              lunchController: lunchController, textInputValue: textInputValue),
+            onPressed: () {
+              lunch.add(lunchInput.text);
+              lunchInput.clear();
+            },
+          ),
         ],
       ),
     );
@@ -109,17 +120,13 @@ class _ItemMakerState extends State<ItemMaker> {
 class AddButton extends StatelessWidget {
   const AddButton({
     Key? key,
-    required this.lunchController,
-    required this.textInputValue,
+    required this.onPressed,
   }) : super(key: key);
 
-  final LunchController lunchController;
-  final String textInputValue;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final LunchController lunchController = Get.find();
-
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         fixedSize: const Size(double.infinity, 56),
@@ -132,9 +139,7 @@ class AddButton extends StatelessWidget {
                 .headline2!
                 .apply(color: Colors.white)),
       ),
-      onPressed: () {
-        lunchController.add();
-      },
+      onPressed: onPressed,
     );
   }
 }

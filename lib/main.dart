@@ -1,15 +1,17 @@
-import 'package:diary/variables/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'route/route.dart' as route;
+import 'package:get/get.dart';
+
+import 'package:diary/variables/theme.dart';
+import 'package:diary/route/pages.dart';
 
 void main() {
   runApp(
     GetMaterialApp(
       title: 'Stone',
       theme: themeData,
-      onGenerateRoute: route.controller,
-      initialRoute: route.loginPage,
+      darkTheme: themeData,
+      getPages: Pages.list,
+      initialRoute: Routes.login,
     ),
   );
 }

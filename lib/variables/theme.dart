@@ -4,7 +4,7 @@ Color _primaryColor = Colors.deepOrangeAccent[100]!;
 
 final ThemeData themeData = ThemeData(
   primaryColor: _primaryColor,
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     headline1: TextStyle(
       color: Colors.black,
       fontSize: 24,
@@ -29,7 +29,7 @@ final ThemeData themeData = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
     focusColor: _primaryColor,
-    border: UnderlineInputBorder(
+    border: const UnderlineInputBorder(
       borderSide: BorderSide(width: 2),
     ),
     focusedBorder: UnderlineInputBorder(
@@ -38,7 +38,7 @@ final ThemeData themeData = ThemeData(
         width: 2,
       ),
     ),
-    enabledBorder: UnderlineInputBorder(
+    enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: Colors.grey),
     ),
   ),
