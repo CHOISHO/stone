@@ -1,7 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:diary/controller/lunch_controller.dart';
-import 'package:diary/page/home_page.dart';
 import 'package:diary/route/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
