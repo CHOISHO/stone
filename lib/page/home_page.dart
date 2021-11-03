@@ -50,25 +50,31 @@ class MyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LunchController lunch = Get.find();
-    RxList lunchList = lunch.lunch;
-    StreamController<int> controller = StreamController<int>();
+    // RxList lunchList = lunch.lunch;
+    // StreamController<int> controller = StreamController<int>();
+    print(lunch.getLunchList.toString());
+    print(lunch.getLunchList2);
+
     return Center(
-      child: Obx(
-        () => lunchList.length > 1
-            ? FortuneWheel(
-                physics: CircularPanPhysics(
-                  duration: const Duration(seconds: 1),
-                  curve: Curves.decelerate,
-                ),
-                onFling: () {
-                  controller.add(1);
-                },
-                selected: controller.stream,
-                items: [
-                  for (var lunch in lunchList) FortuneItem(child: Text(lunch)),
-                ],
-              )
-            : Container(),
+      //   child: Obx(
+      //     () => lunchList.length > 1
+      //         ? FortuneWheel(
+      //             physics: CircularPanPhysics(
+      //               duration: const Duration(seconds: 1),
+      //               curve: Curves.decelerate,
+      //             ),
+      //             onFling: () {
+      //               controller.add(1);
+      //             },
+      //             selected: controller.stream,
+      //             items: [
+      //               for (var lunch in lunchList) FortuneItem(child: Text(lunch)),
+      //             ],
+      //           )
+      //         : Container(),
+      //   ),
+      child: Center(
+        child: Text(lunch.getLunchList),
       ),
     );
   }
